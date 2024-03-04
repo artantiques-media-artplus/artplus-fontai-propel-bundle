@@ -1,0 +1,17 @@
+proxy_css:
+    path:       /css/{alias}.css
+    controller: Fontai\Bundle\ProxyBundle\Controller\ProxyController::index
+    methods:    [GET]
+    defaults:
+        mime: text/css
+    requirements:
+        alias: '[a-zA-Z0-9_\-\.]+'
+
+proxy_js:
+    path:       /js/{alias}.js
+    controller: Fontai\Bundle\ProxyBundle\Controller\ProxyController::index
+    methods:    [GET]
+    defaults:
+        mime: text/javascript
+    requirements:
+        alias: '[a-zA-Z0-9_\-\.]+'

@@ -1,0 +1,23 @@
+{
+    "name": "fontai/proxy-bundle",
+    "type": "symfony-bundle",
+    "description": "Fontai ProxyBundle",
+    "authors": [
+        {
+            "name": "Lumír Toman",
+            "email": "toman@websource.cz"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "wikimedia/less.php": ">=3.0.0",
+        "scssphp/scssphp": ">=1.0.0"
+    },
+    "autoload": {
+        "psr-4": { "Fontai\\Bundle\\ProxyBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev"
+}
