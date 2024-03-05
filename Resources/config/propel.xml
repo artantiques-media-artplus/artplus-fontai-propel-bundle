@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="propel.dbal.default_connection">default</parameter>
+
+        <parameter key="propel.schema_locator.class">Propel\Bundle\PropelBundle\Service\SchemaLocator</parameter>
+        <parameter key="propel.data_collector.class">Propel\Bundle\PropelBundle\DataCollector\PropelDataCollector</parameter>
+        <parameter key="propel.logger.class">Propel\Bundle\PropelBundle\Logger\PropelLogger</parameter>
+        <parameter key="propel.twig.extension.syntax.class">Propel\Bundle\PropelBundle\Twig\Extension\SyntaxExtension</parameter>
+        <parameter key="form.type_guesser.propel.class">Propel\Bundle\PropelBundle\Form\TypeGuesser</parameter>
+        <parameter key="propel.form.type.model.class">Propel\Bundle\PropelBundle\Form\Type\ModelType</parameter>
+        <parameter key="propel.dumper.yaml.class">Propel\Bundle\PropelBundle\DataFixtures\Dumper\YamlDataDumper</parameter>
+        <parameter key="propel.loader.yaml.class">Propel\Bundle\PropelBundle\DataFixtures\Loader\YamlDataLoader</parameter>
+        <parameter key="propel.loader.xml.class">Propel\Bundle\PropelBundle\DataFixtures\Loader\XmlDataLoader</parameter>
+    </parameters>
+
+    <services>
+        <service id="propel.schema_locator" class="%propel.schema_locator.class%" public="true">
+            <argument type="service" id="file_locator" />
+            <argument>%propel.configuration%</argument>
+        </service>
+
+        <service id="propel.logger" class="%propel.logger.class%" public="true">
+            <tag name="monolog.logger" channel="propel" />
+            <argument type="service" id="logger" on-invalid="null" />
+            <argument type="service" id="debug.stopwatch" on-invalid="null" />
+        </service>
+
+        <service id="propel.data_collector" class="%propel.data_collector.class%" public="false">
+            <argument type="service" id="propel.logger" />
+            <tag name="data_collector" template="@Propel/Collector/propel" id="propel" />
+        </service>
+
+        <service id="propel.twig.extension.syntax" class="%propel.twig.extension.syntax.class%">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="form.type_guesser.propel" class="%form.type_guesser.propel.class%">
+            <tag name="form.type_guesser" />
+        </service>
+
+        <service id="propel.form.type.model" class="%propel.form.type.model.class%">
+            <tag name="form.type" alias="model" />
+        </service>
+
+        <service id="propel.dumper.yaml" class="%propel.dumper.yaml.class%">
+            <argument>%kernel.project_dir%</argument>
+            <argument>%propel.configuration%</argument>
+        </service>
+
+        <service id="propel.loader.yaml" class="%propel.loader.yaml.class%">
+            <argument>%kernel.project_dir%</argument>
+            <argument>%propel.configuration%</argument>
+            <argument type="service" id="faker.generator" on-invalid="null" />
+        </service>
+
+        <service id="propel.loader.xml" class="%propel.loader.xml.class%">
+            <argument>%kernel.project_dir%</argument>
+            <argument>%propel.configuration%</argument>
+        </service>
+
+        <service id="Propel\Bundle\PropelBundle\Controller\PanelController">
+            <tag name="controller.service_arguments" />
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" on-invalid="ignore" />
+            </call>
+        </service>
+    </services>
+</container>
